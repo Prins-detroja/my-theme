@@ -1,0 +1,49 @@
+<style>
+.collection-products .row {
+    display: flex;
+    flex-wrap: wrap; /* Wrap enable */
+    gap: 2rem;
+}
+
+.collection-products .col {
+    width: calc(33.33% - 2rem); /* Gap ka hisab */
+    box-sizing: border-box;
+    padding: 10px;
+    box-shadow: #0000001a 0px 0px 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+}
+
+.collection-products .col a {
+    text-decoration: none;
+    color: #333;
+}
+
+.collection-products img {
+    width: 100%;
+}
+
+.collection-products {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 1rem; 
+    box-shadow: #0000001a 0px 0px 10px;
+}
+
+
+</style>
+<div class="collection-products">
+   <h1 style="text-align:center;" >{{ collection.title }}</h1>
+    <div class="row">
+        {% for product in collection.products %}
+            <div class="col">
+                <a href="{{ product.url }}">
+                    <img src="{{ product.featured_image | image_url:200x }}" alt="{{ product.title }}">
+                    <h3>{{ product.title }}</h3>
+                    <p>{{ product.price | money }}</p>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>

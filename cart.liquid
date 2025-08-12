@@ -1,0 +1,169 @@
+{% comment %} {% if cart.item_count > 0 %}
+  <h1>Your Cart</h1>
+  <form action="/cart" method="post" novalidate>
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Total</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart.items %}
+          <tr>
+            <!-- Product Title & Image -->
+            <td>
+              <a href="{{ item.url }}">
+                {% if item.image %}
+                  <img src="{{ item.image | img_url: 'small' }}" alt="{{ item.title }}" style="width:50px;">
+                {% endif %}
+                {{ item.product.title }}
+              </a>
+            </td>
+
+            <!-- Single Product Price -->
+            <td>{{ item.price | money }}</td>
+
+            <!-- Quantity Input -->
+            <td>
+              <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" style="width:50px;">
+            </td>
+
+            <!-- Product Total = Price × Qty -->
+            <td>
+              {{ item.line_price | money }}
+            </td>
+
+            <!-- Remove Button -->
+            <td>
+              <a href="/cart/change?line={{ forloop.index }}&quantity=0">Remove</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Cart Total -->
+    <p><strong>Total Cart Price: {{ cart.total_price | money }}</strong></p>
+
+    <!-- Buttons -->
+    <button type="submit">Update Cart</button>
+    <a href="/checkout" class="btn">Checkout</a>
+  </form>
+
+{% else %}
+  <p>Your cart is currently empty.</p>
+{% endif %} {% endcomment %}
+
+
+<style>
+  .cart-container {
+    max-width: 900px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    font-family: Arial, sans-serif;
+  }
+  .cart-title {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+  th {
+    background-color: #f8f8f8;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #fafafa;
+  }
+  .qty-input {
+    width: 50px;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  .total-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #27ae60;
+    text-align: right;
+    margin-top: 15px;
+  }
+  .checkout-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #27ae60;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: 0.3s;
+  }
+  .checkout-btn:hover {
+    background-color: #219150;
+  }
+</style>
+
+<div class="cart-container">
+  <div class="cart-title">Your Shopping Cart</div>
+  
+  {% if cart.item_count > 0 %}
+    <form action="/cart" method="post" novalidate>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in cart.items %}
+            <tr>
+              <td>
+                <img src="{{ item.image | img_url: '100x' }}" alt="{{ item.product.title }}" style="width:60px; margin-right:10px; vertical-align:middle;">
+                {{ item.product.title }}
+              </td>
+              <td>{{ item.price | money }}</td>
+              <td>
+                <input type="number" name="updates[]" value="{{ item.quantity }}" min="0" class="qty-input">
+              </td>
+              <td>{{ item.line_price | money }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="total-price">
+        Cart Total: {{ cart.total_price | money }}
+      </div>
+
+      <div style="text-align:right; margin-top:20px;">
+        <input type="submit" name="update" value="Update Cart" class="checkout-btn" style="background-color:#3498db;">
+        <a href="/checkout" class="checkout-btn">Proceed to Checkout</a>
+      </div>
+    </form>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+</div>

@@ -1,0 +1,67 @@
+<style>
+.product-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 3rem;
+    padding: 2rem;
+    max-width: 1000px;
+    box-shadow: #0000001a 0px 0px 10px ;
+    margin: 5rem auto;
+}
+.product-image {
+    flex: 1;
+}
+.product-image img {
+    max-width: 100%;
+    margin:1rem 0;
+    height: auto;
+}
+.product-content {
+    flex: 2;
+}
+.product-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+.product-description {
+    margin-bottom: 1rem;
+}
+.product-price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+.add-to-cart-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition:0.3s ease;
+    border-radius: 0.25rem;
+
+    &:hover {
+        background-color: #0056b3;
+    }
+}
+</style>
+
+<div class="product-container">
+
+    <div class="product-image">
+        {% if product.featured_image %}
+            <img src="{{ product.featured_image | image_url: width:200x }}" alt="{{ product.title }}">
+        {% endif %}
+    </div>
+
+    <div class="product-content">
+        <h1 class="product-title">{{ product.title }}</h1>
+        <div class="product-description">{{ product.description }}</div>
+        <p class="product-price">{{ product.price | money }}</p>
+        <form action="/cart/add" method="post">
+            <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+            <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        </form>
+    </div>
+</div>
